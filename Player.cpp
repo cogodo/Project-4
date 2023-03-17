@@ -13,7 +13,7 @@
  */
 
 #include <fstream>
-
+#include <sstream>
 #include "Player.h"
 
 
@@ -63,24 +63,34 @@ int Player::get_remaining_ships() {
 
 char Player::get_grid_at(int row, int col) {
     // TODO: write implementation here.
-    return grid[row][col];
+    char newRow = static_cast<char>(row + '1');
+    char newCol = static_cast<char>(col + 'A');
+    return grid[newRow][newCol];
 }
 
 char Player::get_guess_grid_at(int row, int col) {
     // TODO: write implementation here.
-    return guess_grid[row][col];
-}
+    char newRow = static_cast<char>(row + '1');
+    char newCol = static_cast<char>(col + 'A');
+    return guess_grid[newRow][newCol];}
 
 void Player::add_ship(Ship ship) {
     // TODO: write implementation here.
+    
     if(num_ships == MAX_NUM_SHIPS) {
         return;
     }
     ships[num_ships] = ship;
     if(ship.is_horizontal()) {
-       
-        for(int i = 0; i < ship.get_size(); i++) {
-           
+        int row = ship.get_start().get_row();
+        for(int i = ship.get_start().get_col(); i < ship.get_end().get_col(); i++) {
+            grid[row][i] = SHIP_LETTER;
+        }
+    }
+    else {
+        int col = ship.get_start().get_col();
+        for(int k = ship.get_start().get_row(); k < ship.get_end().get_row();k++) {
+            grid[k][col] = SHIP_LETTER;
         }
     }
     num_ships++;
@@ -100,13 +110,13 @@ void Player::attack(Player &opponent, Position pos) {
     else {
         guess_grid[rowChoice][colChoice] = MISS_LETTER;
         opponent.grid[rowChoice][colChoice] = MISS_LETTER;
-        cout << get_name() << " " << "(" << rowChoice << "," << colChoice << ") " << "miss";
+        cout << get_name() << " (" << rowChoice << "," << colChoice << ") " << "miss";
     }
     return;
 }
 
 void Player::announce_ship_sunk(int size) {
-    // TODO: write implementation here.
+    // DONE
     if(size == 2){
         cout << "Congratulations " << name << "! You sunk a Destroyer";
     }
@@ -129,8 +139,8 @@ bool Player::load_grid_file(string filename) {
 }
 
 bool Player::destroyed() {
-    // TODO: write implementation here.
-    if(num_ships == 0) {
+    // DONE
+    if(remaining_ships == 0) {
         return true;
     }
     return false;
