@@ -94,7 +94,7 @@ class Player {
      *           increment num_ships and remaining_ships.
      *           Set the positions on grid with SHIP_LETTER based on the
      *           start and end of ship. 
-     *           If num_ships is already equall to MAX_NUM_SHIPS,
+     *           If num_ships is already equal to MAX_NUM_SHIPS,
      *           the function should return without making any changes. 
      */
     void add_ship(Ship ship);

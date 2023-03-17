@@ -17,13 +17,13 @@
 #include <iostream>
 
 Position::Position() {
-    // TODO: write implementation here.
+   
      row = 0;
      col = 0;
 }
 
 Position::Position(int row_in, int col_in) {
-    // TODO: write implementation here.
+
     row = row_in;
     row = check_range(row);
     col = col_in;
@@ -31,7 +31,7 @@ Position::Position(int row_in, int col_in) {
 }
 
 Position::Position(char row_in, char col_in) {
-    // TODO: write implementation here.
+ 
     row = row_in - '1';
     row = check_range(row);
     col = toupper(col_in) - 'A';
@@ -44,27 +44,26 @@ int Position::get_row() {
 }
 
 void Position::set_row(int row_in) {
-    // TODO: write implementation here.
+  
     row = row_in;
     row = check_range(row);
     return;
 }
 
 int Position::get_col() {
-    // TODO: write implementation here.
-    
+  
     return col;
 }
 
 void Position::set_col(int col_in) {
-    // TODO: write implementation here.
+ 
     col = col_in;
     col = check_range(col);
     return;
 }
 
 void Position::read(istream &is) {
-    // TODO: write implementation here.
+ 
     char junk;
     char temp;
     is >> row;
@@ -85,13 +84,13 @@ void Position::read(istream &is) {
 }
 
 void Position::write(ostream &os) {
-    // TODO: write implementation here.
+   
     os << "(" << (row + 1) << "," << (static_cast<char>(col + 'A')) << ")";
     return;
 }
 
 int Position::check_range(int val) {
-    // TODO: write implementation here.
+   
         if(val <= 7 && val >= 0) {
         return val;
     }
