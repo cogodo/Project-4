@@ -18,13 +18,13 @@
 
 
 Game::Game() {
-    p1("Player1");
-    p2("Player2");
+    p1;
+    p2;
 }
 
 Game::Game(Player player1, string grid1, Player player2, string grid2) {
-    p1(player1.get_name());
-    p2(player2.get_name());
+    p1 = player1;
+    p2 = player2;
 }
 
 Player Game::get_p1() {
