@@ -141,12 +141,11 @@ bool Player::load_grid_file(string filename) {
     Position shipStart;
     Position shipEnd;
     while(gridRead >> shipStart && gridRead >> shipEnd) {
-        gridRead >> shipStart;
-        gridRead >> shipEnd;
         Ship ship(shipStart, shipEnd);
-        add_ship(ship);
+            add_ship(ship);
+        
     }
-    return false;
+    return true;
 }
 
 bool Player::destroyed() {
