@@ -18,31 +18,46 @@
 
 
 Game::Game() {
-    // TODO: write implementation here.
+    p1("Player1");
+    p2("Player2");
 }
 
 Game::Game(Player player1, string grid1, Player player2, string grid2) {
-    // TODO: write implementation here.
+    p1(player1.get_name());
+    p2(player2.get_name());
 }
 
 Player Game::get_p1() {
-    // TODO: write implementation here.
-    return Player();
+    
+    return p1;
 }
 
 Player Game::get_p2() {
     // TODO: write implementation here.
-    return Player();
+    return p2;
 }
 
 string Game::get_move(string player_name) {
-    // TODO: write implementation here.
-    return "";
+    string move;
+    cout << player_name << " enter your move: ";
+    cin >> move;
+    return move;
 }
 
 bool Game::check_valid_move(string move) {
-    // TODO: write implementation here.
-    return false;
+    
+    if (move.size() > 1) {
+        cout << p1.get_name() << " you entered an invalid input" << endl;
+        return false;
+    }
+    else if (move[0] < 1 || move[0] > 8 ||
+        toupper(static_cast<char>(move[1])) < 'A' || toupper(static_cast<char>(move[1])) > 'H') {
+        cout << p1.get_name() << " you entered an invalid position" << endl;
+        return false;
+    }
+    else {
+        return true;
+    }
 }
 
 void Game::start(char difficulty, int max_num_rounds) {
