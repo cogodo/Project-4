@@ -48,6 +48,11 @@ void test_ship() {
 
 void test_player() {
     // Write your tests here
+    Player bob;
+    bob.init_grid();
+    bob.load_grid_file("grid2.txt");
+    bob.load_grid_file("grid1.txt");
+    bob.print_grid();
     return;
 }
 

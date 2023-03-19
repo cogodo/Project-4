@@ -32,7 +32,6 @@ Ship::Ship(Position start_in, Position end_in) {
     start.set_col(start_in.get_col());
     end.set_row(end_in.get_row());
     end.set_col(end_in.get_col());
-
     size = get_size();
     num_hits = 0;
 }
@@ -52,14 +51,14 @@ Position Ship::get_end() {
 int Ship::get_size() {
     
     if (is_horizontal()) {
-        return abs(end.get_col() - start.get_col());
+        return abs(end.get_col() - start.get_col()) + 1;
     }
     else {
-        return abs(end.get_row() - start.get_row());
+        return abs(end.get_row() - start.get_row()) + 1;
     }
     
 }
-
+	
 bool Ship::is_horizontal() {
 
     if (start.get_row() == end.get_row()) {
@@ -76,7 +75,7 @@ bool Ship::has_position(Position pos) {
     if (is_horizontal()) {
         if (pos.get_row() == start.get_row() &&
             ((start.get_col() <= pos.get_col() && pos.get_col() <= end.get_col()) ||
-                (end.get_col() <= pos.get_col() && pos.get_col() <= start.get_col()))) {
+             (end.get_col() <= pos.get_col() && pos.get_col() <= start.get_col()))) {
             return true;
         }
         else {

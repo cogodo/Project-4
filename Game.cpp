@@ -18,13 +18,21 @@
 
 
 Game::Game() {
-    p1;
-    p2;
+    p1 = Player();
+    p2 = Player();
 }
 
 Game::Game(Player player1, string grid1, Player player2, string grid2) {
     p1 = player1;
+    if(!p1.load_grid_file(grid1) || grid1 == "") {
+        generate_random_grid(p1);
+        cout << "Generating random grid for " << p1.get_name();
+    }
     p2 = player2;
+    if(!p2.load_grid_file(grid2) || grid2 == "") {
+        generate_random_grid(p2);
+        cout << "Generating random grid for " << p2.get_name();
+    }
 }
 
 Player Game::get_p1() {
@@ -46,12 +54,12 @@ string Game::get_move(string player_name) {
 
 bool Game::check_valid_move(string move) {
     
-    if (move.size() > 1) {
+    if (move.size() != 2) {
         cout << p1.get_name() << " you entered an invalid input" << endl;
         return false;
     }
-    else if (move[0] < 1 || move[0] > 8 ||
-        toupper(static_cast<char>(move[1])) < 'A' || toupper(static_cast<char>(move[1])) > 'H') {
+    else if (static_cast<int>(move[0]) < '1' || static_cast<int>(move[0]) > '8' ||
+        static_cast<int>(toupper(move[1])) < 'A' || static_cast<int>(toupper(move[1])) > 'H') {
         cout << p1.get_name() << " you entered an invalid position" << endl;
         return false;
     }
@@ -62,6 +70,7 @@ bool Game::check_valid_move(string move) {
 
 void Game::start(char difficulty, int max_num_rounds) {
     // TODO: write implementation here.
+    
 }
 
 // Your code goes above this line.
@@ -186,4 +195,3 @@ void Game::opponent_make_move(char difficulty) {
         // TODO: implement for S'more version
     }
 }
-

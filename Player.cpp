@@ -101,15 +101,22 @@ void Player::attack(Player &opponent, Position pos) {
     // TODO: write implementation here.
     int rowChoice = pos.get_row();
     int colChoice = pos.get_col();
-    if(opponent.get_grid_at(rowChoice, colChoice) == SHIP_LETTER) {
-        guess_grid[rowChoice][colChoice] = HIT_LETTER;
-        opponent.grid[rowChoice][colChoice] = HIT_LETTER;
-        cout << get_name() << " " << "(" << rowChoice << "," << colChoice << ") " << "hit";
-    }
-    else {
-        guess_grid[rowChoice][colChoice] = MISS_LETTER;
-        opponent.grid[rowChoice][colChoice] = MISS_LETTER;
-        cout << get_name() << " (" << rowChoice << "," << colChoice << ") " << "miss";
+    for(int i = 0; i < remaining_ships; i++) {
+        if(ships[i].has_position(pos)) {
+            ships[i].hit();
+            guess_grid[rowChoice][colChoice] = HIT_LETTER;
+            opponent.grid[rowChoice][colChoice] = HIT_LETTER;
+            if(ships[i].has_sunk()) {
+                opponent.remaining_ships--;
+                opponent.announce_ship_sunk(ships[i].get_size());
+            }
+            cout << get_name() << " " << "(" << rowChoice << "," << colChoice << ") " << "hit";
+        }
+        else {
+            guess_grid[rowChoice][colChoice] = MISS_LETTER;
+            opponent.grid[rowChoice][colChoice] = MISS_LETTER;
+            cout << get_name() << " (" << rowChoice << "," << colChoice << ") " << "miss";
+        }
     }
     return;
 }
