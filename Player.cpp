@@ -63,16 +63,15 @@ int Player::get_remaining_ships() {
 
 char Player::get_grid_at(int row, int col) {
     // TODO: write implementation here.
-    char newRow = static_cast<char>(row + '1');
-    char newCol = static_cast<char>(col + 'A');
-    return grid[newRow][newCol];
+    char x = grid[row][col];
+    return x;
 }
 
 char Player::get_guess_grid_at(int row, int col) {
     // TODO: write implementation here.
-    char newRow = static_cast<char>(row + '1');
-    char newCol = static_cast<char>(col + 'A');
-    return guess_grid[newRow][newCol];}
+    char y = guess_grid[row][col];
+    return y;
+}
 
 void Player::add_ship(Ship ship) {
     // TODO: write implementation here.
@@ -83,13 +82,13 @@ void Player::add_ship(Ship ship) {
     ships[num_ships] = ship;
     if(ship.is_horizontal()) {
         int row = ship.get_start().get_row();
-        for(int i = ship.get_start().get_col(); i < ship.get_end().get_col(); i++) {
+        for(int i = ship.get_start().get_col(); i <= ship.get_end().get_col(); i++) {
             grid[row][i] = SHIP_LETTER;
         }
     }
     else {
         int col = ship.get_start().get_col();
-        for(int k = ship.get_start().get_row(); k < ship.get_end().get_row();k++) {
+        for(int k = ship.get_start().get_row(); k <= ship.get_end().get_row();k++) {
             grid[k][col] = SHIP_LETTER;
         }
     }
@@ -134,7 +133,19 @@ void Player::announce_ship_sunk(int size) {
 
 bool Player::load_grid_file(string filename) {
     // TODO: write implementation here.
-    
+    ifstream gridRead;
+    gridRead.open(filename);
+    if(!gridRead.is_open()) {
+        return false;
+    }
+    Position shipStart;
+    Position shipEnd;
+    while(gridRead >> shipStart && gridRead >> shipEnd) {
+        gridRead >> shipStart;
+        gridRead >> shipEnd;
+        Ship ship(shipStart, shipEnd);
+        add_ship(ship);
+    }
     return false;
 }
 
