@@ -75,8 +75,8 @@ bool Ship::has_position(Position pos) {
     
     if (is_horizontal()) {
         if (pos.get_row() == start.get_row() &&
-            ((start.get_col() < pos.get_col() && pos.get_col() < end.get_col()) ||
-                (end.get_col() < pos.get_col() && pos.get_col < start.get_col()))) {
+            ((start.get_col() <= pos.get_col() && pos.get_col() <= end.get_col()) ||
+                (end.get_col() <= pos.get_col() && pos.get_col <= start.get_col()))) {
             return true;
         }
         else {
@@ -85,8 +85,8 @@ bool Ship::has_position(Position pos) {
     }
     else {
         if (pos.get_col() == start.get_col() &&
-            ((start.get_row() < pos.get_row() && pos.get_row() < end.get_row()) ||
-                (end.get_row() < pos.get_row() && pos.get_row < start.get_row()))) {
+            ((start.get_row() <= pos.get_row() && pos.get_row() <= end.get_row()) ||
+                (end.get_row() <= pos.get_row() && pos.get_row <= start.get_row()))) {
             return true;
         }
         else {
