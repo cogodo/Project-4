@@ -18,44 +18,101 @@
 
 
 Ship::Ship() {
-    // TODO: write implementation here.
+    start(0, 0);
+    end(0, 0);
+    size = 0;
+    num_hits = 0;
 }
 
 Ship::Ship(Position start_in, Position end_in) {
-    // TODO: write implementation here.
+    
+    /*start.set_row(start_in.get_row());
+    start.set_col(start_in.get_col());
+    end.set_row(end_in.get_row());
+    end.set_col(end_in.get_col());*/
+
+    start(start_in.get_row(), start_in.get_col());
+    end(end_in.get_row(), end_in.get_col());
+    size = get_size();
+    num_hits = 0;
 }
 
 Position Ship::get_start() {
-    // TODO: write implementation here.
-    return Position();
+
+    return start;
+
 }
 
 Position Ship::get_end() {
-    // TODO: write implementation here.
-    return Position();
+
+    return end;
+
 }
 
 int Ship::get_size() {
-    // TODO: write implementation here.
-    return -1;
+    
+    if (is_horizontal()) {
+        return abs(end.get_col() - start.get_col());
+    }
+    else {
+        return abs(end.get_row() - start.get_row());
+    }
+    
 }
 
 bool Ship::is_horizontal() {
-    // TODO: write implementation here.
-    return false;
+
+    if (start.get_row() == end.get_row()) {
+        return true;
+    }
+
+    else {
+        return false;
+    }
 }
 
 bool Ship::has_position(Position pos) {
-    // TODO: write implementation here.
-    return false;
+    
+    if (is_horizontal()) {
+        if (pos.get_row() == start.get_row() &&
+            (start.get_col() < pos.get_col() < end.get_col() ||
+                end.get_col() < pos.get_col() < start.get_col())) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    else {
+        if (pos.get_col() == start.get_col() &&
+            (start.get_row() < pos.get_row() < end.get_row() ||
+                end.get_row() < pos.get_row() < start.get_row())) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 }
 
 void Ship::hit() {
-    // TODO: write implementation here.
+    
+    if (!has_sunk()) {
+        num_hits++;
+    }
+
     return;
 }
 
 bool Ship::has_sunk() {
-    // TODO: write implementation here.
-    return false;
+    
+    if (num_hits == size) {
+        return true;
+    }
+    
+    else {
+        return false;
+    }
+    
 }
