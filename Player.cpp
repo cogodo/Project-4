@@ -135,6 +135,7 @@ void Player::attack(Player& opponent, Position pos) {
                 guess_grid[rowChoice][colChoice] = HIT_LETTER;
             }
             guess_grid[rowChoice][colChoice] = HIT_LETTER;
+            opponent.grid[rowChoice][colChoice] = HIT_LETTER;
             if (opponent.ships[i].has_sunk()) {
                 opponent.remaining_ships--;
             }

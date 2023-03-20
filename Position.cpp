@@ -4,8 +4,8 @@
  * Position.cpp
  * Project UID 8885f2d9f10d2f99bc099aa9c3fc0543
  *
- * <#Name#>Colin Gordon, Chris Sherbenou
- * <#Uniqname#>cogo, csherben
+ * <#Name#> Colin Gordon, Christopher Sherbenou
+ * <#Uniqname#> cogo, csherben
  *
  * Project 4: Battleship
  *

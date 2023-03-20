@@ -4,8 +4,8 @@
  * Game.cpp
  * Project UID 8885f2d9f10d2f99bc099aa9c3fc0543
  *
- * <#Name#>
- * <#Uniqname#>
+ * <#Name#> Colin Gordon, Christopher Sherbenou
+ * <#Uniqname#> cogo, csherben
  *
  * Project 4: Battleship
  *
@@ -24,19 +24,19 @@ Game::Game() {
 
 Game::Game(Player player1, string grid1, Player player2, string grid2) {
     p1 = player1;
-    if(!p1.load_grid_file(grid1) || grid1 == "") {
+    if (!p1.load_grid_file(grid1) || grid1 == "") {
         generate_random_grid(p1);
         cout << "Generating random grid for " << p1.get_name();
     }
     p2 = player2;
-    if(!p2.load_grid_file(grid2) || grid2 == "") {
+    if (!p2.load_grid_file(grid2) || grid2 == "") {
         generate_random_grid(p2);
         cout << "Generating random grid for " << p2.get_name();
     }
 }
 
 Player Game::get_p1() {
-    
+
     return p1;
 }
 
@@ -46,14 +46,15 @@ Player Game::get_p2() {
 }
 
 string Game::get_move(string player_name) {
-    string move;
+    string move = "";
     cout << player_name << " enter your move: ";
     cin >> move;
+    cout << endl;
     return move;
 }
 
 bool Game::check_valid_move(string move) {
-    
+
     if (move.size() != 2) {
         cout << p1.get_name() << " you entered an invalid input" << endl;
         return false;
@@ -70,45 +71,62 @@ bool Game::check_valid_move(string move) {
 
 void Game::start(char difficulty, int max_num_rounds) {
     // TODO: write implementation here.
-    Game game;
     string player = p1.get_name();
     string opponent = p2.get_name();
-    string winner;
+    string winner = "";
     int count = 0;
-    while(count < max_num_rounds) {
+    while (count < max_num_rounds) {
         count++;
         string move = get_move(player);
-        while(!check_valid_move(move)) {
+        while (!check_valid_move(move)) {
             move = get_move(player);
         }
         Position pos(move[0], move[1]);
         p1.attack(p2, pos);
-      
-        if(p2.destroyed()) {
-            cout << "Game over, winner is " << player <<" in " << count << " rounds";
+        //opponent_make_move(difficulty); Possibly needed here with autograder "both destroyed" condition?
+
+        if (p2.destroyed()) {
+            cout << "Your grid" << endl;
+            p1.print_grid();
+            cout << endl << opponent << "'s grid" << endl;
+            p1.print_guess_grid();
+            cout << "Game over, winner is " << player << " in " << count << " rounds" << endl;
             return;
         }
         opponent_make_move(difficulty);
-        if(p1.destroyed()) {
-            cout << "Game over, winner is " << opponent <<" in " << count << " rounds";
+        cout << endl;
+        if (p1.destroyed()) {                 // else if, in "both destroyed needed"
+            cout << "Your grid" << endl;
+            p1.print_grid();
+            cout << endl << opponent << "'s grid" << endl;
+            p1.print_guess_grid();
+            cout << endl << "Game over, winner is " << opponent << " in " << count << " rounds" << endl;
             return;
         }
+
+        /*else if (p1.destroyed() && p2.destroyed()) {   needed for "both destroyed" also?
+            cout << "Game over. No Winner. Both destroyed in " << count << " rounds" << endl;
+            return;
+        }*/
         cout << "Your grid" << endl;
-         p1.print_grid();
-        p2.print_grid();
-        cout << endl << opponent << "'s grid" << endl;
+        p1.print_grid();
+        cout << opponent << "'s grid" << endl;
         p1.print_guess_grid();
     }
-   
+
+    if (count == max_num_rounds) {
+        cout << "Game over, winner is no one in " << count << " rounds";
+    }
+
     return;
 }
 
 // Your code goes above this line.
 // Don't change the implementations below!
 
-void Game::generate_random_grid(Player &p) {
+void Game::generate_random_grid(Player& p) {
     // grid to check which position has been taken
-    bool grid[MAX_GRID_SIZE][MAX_GRID_SIZE] = {{false}};
+    bool grid[MAX_GRID_SIZE][MAX_GRID_SIZE] = { {false} };
 
     for (int k = 0; k < 10 && p.get_num_ships() < 5; k++) {
         // i is the length of the ship to be made
@@ -129,13 +147,17 @@ void Game::generate_random_grid(Player &p) {
             // position 1 inthe order of bottom, right, left, top
             if (row + i < MAX_GRID_SIZE) {
                 pos2 = Position(row + i, col);
-            } else if (col + i < MAX_GRID_SIZE) {
+            }
+            else if (col + i < MAX_GRID_SIZE) {
                 pos2 = Position(row, col + i);
-            } else if (col - i >= 0) {
+            }
+            else if (col - i >= 0) {
                 pos2 = Position(row, col - i);
-            } else if (row - i >= 0) {
+            }
+            else if (row - i >= 0) {
                 pos2 = Position(row - i, col);
-            } else {
+            }
+            else {
                 continue;
             }
 
@@ -145,9 +167,9 @@ void Game::generate_random_grid(Player &p) {
             if (s.is_horizontal()) {
                 // start and end depends on if pos1 is to the left of pos2
                 int start = pos1.get_col() < pos2.get_col() ?
-                            pos1.get_col() : pos2.get_col();
+                    pos1.get_col() : pos2.get_col();
                 int end = pos1.get_col() < pos2.get_col() ?
-                          pos2.get_col() : pos1.get_col();
+                    pos2.get_col() : pos1.get_col();
                 // Loop through start and end to check if any of the positions
                 // has been taken
                 for (int j = start; j <= end; j++) {
@@ -162,12 +184,13 @@ void Game::generate_random_grid(Player &p) {
                 for (int j = start; j <= end; j++) {
                     grid[pos1.get_row()][j] = true;
                 }
-            } else {
+            }
+            else {
                 // start and end depends on if pos1 is to the left of pos2
                 int start = pos1.get_row() < pos2.get_row() ?
-                            pos1.get_row() : pos2.get_row();
+                    pos1.get_row() : pos2.get_row();
                 int end = pos1.get_row() < pos2.get_row() ?
-                          pos2.get_row() : pos1.get_row();
+                    pos2.get_row() : pos1.get_row();
                 // Loop through start and end to check if any of the positions
                 // has been taken
                 for (int j = start; j <= end; j++) {
@@ -203,7 +226,8 @@ void Game::opponent_make_move(char difficulty) {
         cout << endl;
         p2.attack(p1, next);
         cout << "You received an attack at " << next << endl << endl;
-    } else if (difficulty == EASY) {
+    }
+    else if (difficulty == EASY) {
 #ifndef NOCPU
         int randRow = get_random_number() % MAX_GRID_SIZE;
         int randCol = get_random_number() % MAX_GRID_SIZE;
@@ -220,7 +244,8 @@ void Game::opponent_make_move(char difficulty) {
         p2.attack(p1, next);
         cout << "You received an attack at " << next << endl << endl;
 #endif
-    } else if (difficulty == MEDIUM) {
+    }
+    else if (difficulty == MEDIUM) {
         // Simple AI that checks right, bottom, left, top of hit position
         // TODO: implement for S'more version
     }
