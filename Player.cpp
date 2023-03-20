@@ -120,8 +120,10 @@ void Player::attack(Player& opponent, Position pos) {
     int colChoice = pos.get_col();
     bool hit = false;
     int temp = 0;
-    if (opponent.grid[rowChoice][colChoice] == HIT_LETTER) {
-        cout << get_name() << " (" << rowChoice << "," << colChoice << ") " << "miss";
+    int rowVisual = rowChoice + 1;
+    char colVisual = static_cast<char>(toupper(colChoice + 'A'));
+    if (guess_grid[rowChoice][colChoice] == HIT_LETTER) {
+        cout << get_name() << " (" << rowVisual << "," << colVisual << ") " << "miss";
         cout << endl;
         return;
     }
@@ -132,23 +134,21 @@ void Player::attack(Player& opponent, Position pos) {
             if (opponent.get_name() == "CPU") {
                 guess_grid[rowChoice][colChoice] = HIT_LETTER;
             }
-            opponent.grid[rowChoice][colChoice] = HIT_LETTER;
+            guess_grid[rowChoice][colChoice] = HIT_LETTER;
             if (opponent.ships[i].has_sunk()) {
                 opponent.remaining_ships--;
-                temp = i;
             }
+            temp = i;
         }
     }
-    int rowVisual = rowChoice + 1;
-    char colVisual = static_cast<char>(toupper(colChoice + 'A'));
-    if (hit == true) {
+    if (hit) {
         cout << get_name() << " " << "(" << rowVisual << "," << colVisual << ") " << "hit";
         cout << endl;
         if (opponent.ships[temp].has_sunk()) {
-            announce_ship_sunk(ships[temp].get_size());
+            announce_ship_sunk(opponent.ships[temp].get_size());
         }
     }
-    else if (hit == false) {
+    else if (!hit) {
         guess_grid[rowChoice][colChoice] = MISS_LETTER;
         opponent.grid[rowChoice][colChoice] = MISS_LETTER;
         cout << get_name() << " (" << rowVisual << "," << colVisual << ") " << "miss";
