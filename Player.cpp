@@ -101,39 +101,48 @@ void Player::attack(Player &opponent, Position pos) {
     // TODO: write implementation here.
     int rowChoice = pos.get_row();
     int colChoice = pos.get_col();
+    bool hit = false;
     for(int i = 0; i < remaining_ships; i++) {
-        if(ships[i].has_position(pos)) {
+        if(ships[i].has_position(pos) && opponent.grid[rowChoice][colChoice] != HIT_LETTER) {
+            hit = true;
             ships[i].hit();
-            guess_grid[rowChoice][colChoice] = HIT_LETTER;
+            if(opponent.get_name() == "CPU") {
+                guess_grid[rowChoice][colChoice] = HIT_LETTER;
+            }
             opponent.grid[rowChoice][colChoice] = HIT_LETTER;
             if(ships[i].has_sunk()) {
                 opponent.remaining_ships--;
                 opponent.announce_ship_sunk(ships[i].get_size());
             }
-            cout << get_name() << " " << "(" << rowChoice << "," << colChoice << ") " << "hit";
-        }
-        else {
-            guess_grid[rowChoice][colChoice] = MISS_LETTER;
-            opponent.grid[rowChoice][colChoice] = MISS_LETTER;
-            cout << get_name() << " (" << rowChoice << "," << colChoice << ") " << "miss";
         }
     }
+    if(hit == true) {
+        cout << get_name() << " " << "(" << rowChoice << "," << colChoice << ") " << "hit";
+        cout << endl;
+    }
+    else if(hit == false) {
+        guess_grid[rowChoice][colChoice] = MISS_LETTER;
+        opponent.grid[rowChoice][colChoice] = MISS_LETTER;
+        cout << get_name() << " (" << rowChoice << "," << colChoice << ") " << "miss";
+        cout << endl;
+    }
+
     return;
 }
 
 void Player::announce_ship_sunk(int size) {
     // DONE
     if(size == 2){
-        cout << "Congratulations " << name << "! You sunk a Destroyer";
+        cout << "Congratulations " << name << "! You sunk a Destroyer" << endl;
     }
     else if(size == 3) {
-        cout << "Congratulations " << name << "! You sunk a Submarine";
+        cout << "Congratulations " << name << "! You sunk a Submarine" << endl;
     }
     else if(size == 4) {
-        cout << "Congratulations " << name << "! You sunk a Battleship";
+        cout << "Congratulations " << name << "! You sunk a Battleship" << endl;
     }
     else if(size == 5) {
-        cout << "Congratulations " << name << "! You sunk a Carrier";
+        cout << "Congratulations " << name << "! You sunk a Carrier" << endl;
     }
     return;
 }

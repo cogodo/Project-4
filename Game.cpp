@@ -70,7 +70,35 @@ bool Game::check_valid_move(string move) {
 
 void Game::start(char difficulty, int max_num_rounds) {
     // TODO: write implementation here.
-    
+    Game game;
+    string player = p1.get_name();
+    string opponent = p2.get_name();
+    string winner;
+    int count = 0;
+    while(count < max_num_rounds) {
+        count++;
+        string move = get_move(player);
+        while(!check_valid_move(move)) {
+            move = get_move(player);
+        }
+        Position pos(move[0], move[1]);
+        p1.attack(p2, pos);
+      
+        if(p2.destroyed()) {
+            cout << "Game over, winner is " << player <<" in " << count << " rounds";
+        }
+        opponent_make_move(difficulty);
+        if(p1.destroyed()) {
+            cout << "Game over, winner is " << opponent <<" in " << count << " rounds";
+        }
+        cout << "Your grid" << endl;
+         p1.print_grid();
+        p2.print_grid();
+        cout << endl << opponent << "'s grid" << endl;
+        p1.print_guess_grid();
+    }
+    cout << "Game over, winner is " << winner <<" in " << count << " rounds";
+    return;
 }
 
 // Your code goes above this line.
