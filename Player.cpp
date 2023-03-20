@@ -82,14 +82,31 @@ void Player::add_ship(Ship ship) {
     ships[num_ships] = ship;
     if(ship.is_horizontal()) {
         int row = ship.get_start().get_row();
-        for(int i = ship.get_start().get_col(); i <= ship.get_end().get_col(); i++) {
-            grid[row][i] = SHIP_LETTER;
+        if(ship.get_start().get_col() < ship.get_end().get_col()) {
+            for(int i = ship.get_start().get_col(); i <= ship.get_end().get_col(); i++) {
+                grid[row][i] = SHIP_LETTER;
+            }
         }
-    }
+            else {
+                for(int j = ship.get_end().get_col(); j <= ship.get_start().get_col(); j++) {
+                    grid[row][j] = SHIP_LETTER;
+                }
+            }
+        }
+    
     else {
         int col = ship.get_start().get_col();
-        for(int k = ship.get_start().get_row(); k <= ship.get_end().get_row();k++) {
-            grid[k][col] = SHIP_LETTER;
+        if(ship.get_start().get_row() < ship.get_end().get_row()) {
+            for(int k = ship.get_start().get_row(); k <= ship.get_end().get_row();k++) {
+                grid[k][col] = SHIP_LETTER;
+            }
+        }
+        else {
+            if(ship.get_start().get_row() < ship.get_end().get_row()) {
+                for(int x = ship.get_end().get_row(); x <= ship.get_start().get_row(); x++) {
+                    grid[x][col] = SHIP_LETTER;
+                }
+            }
         }
     }
     num_ships++;
@@ -102,28 +119,39 @@ void Player::attack(Player &opponent, Position pos) {
     int rowChoice = pos.get_row();
     int colChoice = pos.get_col();
     bool hit = false;
-    for(int i = 0; i < remaining_ships; i++) {
-        if(ships[i].has_position(pos) && opponent.grid[rowChoice][colChoice] != HIT_LETTER) {
+    int temp = 0;
+    if(opponent.grid[rowChoice][colChoice] == HIT_LETTER) {
+        cout << get_name() << " (" << rowChoice << "," << colChoice << ") " << "miss";
+        cout << endl;
+        return;
+    }
+    for(int i = 0; i < opponent.num_ships; i++) {
+        if(opponent.ships[i].has_position(pos) && opponent.grid[rowChoice][colChoice] != HIT_LETTER) {
             hit = true;
-            ships[i].hit();
+            opponent.ships[i].hit();
             if(opponent.get_name() == "CPU") {
                 guess_grid[rowChoice][colChoice] = HIT_LETTER;
             }
             opponent.grid[rowChoice][colChoice] = HIT_LETTER;
-            if(ships[i].has_sunk()) {
+            if(opponent.ships[i].has_sunk()) {
                 opponent.remaining_ships--;
-                opponent.announce_ship_sunk(ships[i].get_size());
+                temp = i;
             }
         }
     }
+    int rowVisual = rowChoice + 1;
+    char colVisual = static_cast<char>(toupper(colChoice + 'A'));
     if(hit == true) {
-        cout << get_name() << " " << "(" << rowChoice << "," << colChoice << ") " << "hit";
+        cout << get_name() << " " << "(" << rowVisual << "," << colVisual << ") " << "hit";
         cout << endl;
+        if(opponent.ships[temp].has_sunk()) {
+            announce_ship_sunk(ships[temp].get_size());
+        }
     }
     else if(hit == false) {
         guess_grid[rowChoice][colChoice] = MISS_LETTER;
         opponent.grid[rowChoice][colChoice] = MISS_LETTER;
-        cout << get_name() << " (" << rowChoice << "," << colChoice << ") " << "miss";
+        cout << get_name() << " (" << rowVisual << "," << colVisual << ") " << "miss";
         cout << endl;
     }
 

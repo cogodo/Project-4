@@ -49,10 +49,18 @@ void test_ship() {
 void test_player() {
     // Write your tests here
     Player bob;
+    Position pos1('1','A');
+    Position pos2('1','C');
+    Position pos3('5', 'F');
+    Position pos4('2','F');
+    Ship ship1(pos1, pos2);
+    Ship ship2(pos3, pos4);
     bob.init_grid();
-    bob.load_grid_file("grid2.txt");
-    bob.load_grid_file("grid1.txt");
+   
+    bob.add_ship(ship1);
+    bob.add_ship(ship2);
     bob.print_grid();
+   
     return;
 }
 

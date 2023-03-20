@@ -86,10 +86,12 @@ void Game::start(char difficulty, int max_num_rounds) {
       
         if(p2.destroyed()) {
             cout << "Game over, winner is " << player <<" in " << count << " rounds";
+            return;
         }
         opponent_make_move(difficulty);
         if(p1.destroyed()) {
             cout << "Game over, winner is " << opponent <<" in " << count << " rounds";
+            return;
         }
         cout << "Your grid" << endl;
          p1.print_grid();
@@ -97,7 +99,7 @@ void Game::start(char difficulty, int max_num_rounds) {
         cout << endl << opponent << "'s grid" << endl;
         p1.print_guess_grid();
     }
-    cout << "Game over, winner is " << winner <<" in " << count << " rounds";
+   
     return;
 }
 
