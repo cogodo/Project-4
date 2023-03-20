@@ -4,8 +4,8 @@
  * Player.cpp
  * Project UID 8885f2d9f10d2f99bc099aa9c3fc0543
  *
- * <#Name#> Colin Gordon
- * <#Uniqname#> cogo
+ * <#Name#> Colin Gordon, Christopher Sherbenou
+ * <#Uniqname#> cogo, csherben
  *
  * Project 4: Battleship
  *
@@ -35,7 +35,7 @@ Player::Player(string name_val) {
 
 void Player::init_grid() {
     // TODO: write implementation here.
-    for(int i = 0; i < MAX_GRID_SIZE; i++) {
+    for (int i = 0; i < MAX_GRID_SIZE; i++) {
         for (int k = 0; k < MAX_GRID_SIZE; k++) {
             grid[i][k] = EMPTY_LETTER;
             guess_grid[i][k] = EMPTY_LETTER;
@@ -52,7 +52,7 @@ string Player::get_name() {
 
 int Player::get_num_ships() {
     // TODO: write implementation here.
-    
+
     return num_ships;
 }
 
@@ -75,35 +75,35 @@ char Player::get_guess_grid_at(int row, int col) {
 
 void Player::add_ship(Ship ship) {
     // TODO: write implementation here.
-    
-    if(num_ships == MAX_NUM_SHIPS) {
+
+    if (num_ships == MAX_NUM_SHIPS) {
         return;
     }
     ships[num_ships] = ship;
-    if(ship.is_horizontal()) {
+    if (ship.is_horizontal()) {
         int row = ship.get_start().get_row();
-        if(ship.get_start().get_col() < ship.get_end().get_col()) {
-            for(int i = ship.get_start().get_col(); i <= ship.get_end().get_col(); i++) {
+        if (ship.get_start().get_col() < ship.get_end().get_col()) {
+            for (int i = ship.get_start().get_col(); i <= ship.get_end().get_col(); i++) {
                 grid[row][i] = SHIP_LETTER;
             }
         }
-            else {
-                for(int j = ship.get_end().get_col(); j <= ship.get_start().get_col(); j++) {
-                    grid[row][j] = SHIP_LETTER;
-                }
+        else {
+            for (int j = ship.get_end().get_col(); j <= ship.get_start().get_col(); j++) {
+                grid[row][j] = SHIP_LETTER;
             }
         }
-    
+    }
+
     else {
         int col = ship.get_start().get_col();
-        if(ship.get_start().get_row() < ship.get_end().get_row()) {
-            for(int k = ship.get_start().get_row(); k <= ship.get_end().get_row();k++) {
+        if (ship.get_start().get_row() < ship.get_end().get_row()) {
+            for (int k = ship.get_start().get_row(); k <= ship.get_end().get_row(); k++) {
                 grid[k][col] = SHIP_LETTER;
             }
         }
         else {
-            if(ship.get_start().get_row() < ship.get_end().get_row()) {
-                for(int x = ship.get_end().get_row(); x <= ship.get_start().get_row(); x++) {
+            if (ship.get_start().get_row() > ship.get_end().get_row()) {
+                for (int x = ship.get_end().get_row(); x <= ship.get_start().get_row(); x++) {
                     grid[x][col] = SHIP_LETTER;
                 }
             }
@@ -114,26 +114,26 @@ void Player::add_ship(Ship ship) {
     return;
 }
 
-void Player::attack(Player &opponent, Position pos) {
+void Player::attack(Player& opponent, Position pos) {
     // TODO: write implementation here.
     int rowChoice = pos.get_row();
     int colChoice = pos.get_col();
     bool hit = false;
     int temp = 0;
-    if(opponent.grid[rowChoice][colChoice] == HIT_LETTER) {
+    if (opponent.grid[rowChoice][colChoice] == HIT_LETTER) {
         cout << get_name() << " (" << rowChoice << "," << colChoice << ") " << "miss";
         cout << endl;
         return;
     }
-    for(int i = 0; i < opponent.num_ships; i++) {
-        if(opponent.ships[i].has_position(pos) && opponent.grid[rowChoice][colChoice] != HIT_LETTER) {
+    for (int i = 0; i < opponent.num_ships; i++) {
+        if (opponent.ships[i].has_position(pos) && opponent.grid[rowChoice][colChoice] != HIT_LETTER) {
             hit = true;
             opponent.ships[i].hit();
-            if(opponent.get_name() == "CPU") {
+            if (opponent.get_name() == "CPU") {
                 guess_grid[rowChoice][colChoice] = HIT_LETTER;
             }
             opponent.grid[rowChoice][colChoice] = HIT_LETTER;
-            if(opponent.ships[i].has_sunk()) {
+            if (opponent.ships[i].has_sunk()) {
                 opponent.remaining_ships--;
                 temp = i;
             }
@@ -141,14 +141,14 @@ void Player::attack(Player &opponent, Position pos) {
     }
     int rowVisual = rowChoice + 1;
     char colVisual = static_cast<char>(toupper(colChoice + 'A'));
-    if(hit == true) {
+    if (hit == true) {
         cout << get_name() << " " << "(" << rowVisual << "," << colVisual << ") " << "hit";
         cout << endl;
-        if(opponent.ships[temp].has_sunk()) {
+        if (opponent.ships[temp].has_sunk()) {
             announce_ship_sunk(ships[temp].get_size());
         }
     }
-    else if(hit == false) {
+    else if (hit == false) {
         guess_grid[rowChoice][colChoice] = MISS_LETTER;
         opponent.grid[rowChoice][colChoice] = MISS_LETTER;
         cout << get_name() << " (" << rowVisual << "," << colVisual << ") " << "miss";
@@ -160,16 +160,16 @@ void Player::attack(Player &opponent, Position pos) {
 
 void Player::announce_ship_sunk(int size) {
     // DONE
-    if(size == 2){
+    if (size == 2) {
         cout << "Congratulations " << name << "! You sunk a Destroyer" << endl;
     }
-    else if(size == 3) {
+    else if (size == 3) {
         cout << "Congratulations " << name << "! You sunk a Submarine" << endl;
     }
-    else if(size == 4) {
+    else if (size == 4) {
         cout << "Congratulations " << name << "! You sunk a Battleship" << endl;
     }
-    else if(size == 5) {
+    else if (size == 5) {
         cout << "Congratulations " << name << "! You sunk a Carrier" << endl;
     }
     return;
@@ -179,22 +179,22 @@ bool Player::load_grid_file(string filename) {
     // TODO: write implementation here.
     ifstream gridRead;
     gridRead.open(filename);
-    if(!gridRead.is_open()) {
+    if (!gridRead.is_open()) {
         return false;
     }
     Position shipStart;
     Position shipEnd;
-    while(gridRead >> shipStart && gridRead >> shipEnd) {
+    while (gridRead >> shipStart && gridRead >> shipEnd) {
         Ship ship(shipStart, shipEnd);
-            add_ship(ship);
-        
+        add_ship(ship);
+
     }
     return true;
 }
 
 bool Player::destroyed() {
     // DONE
-    if(remaining_ships == 0) {
+    if (remaining_ships == 0) {
         return true;
     }
     return false;
